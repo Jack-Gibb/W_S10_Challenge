@@ -1,18 +1,41 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
+import { orderReducer, filterReducer, formReducer } from './slice';
+import { orderApi } from './orderApi';
 
 const exampleReducer = (state = { count: 0 }) => {
-  return state
-}
+  return state;
+};
 
 export const resetStore = () => configureStore({
   reducer: {
     example: exampleReducer,
-    // add your reducer(s) here
+    orders: orderReducer,  
+    filter: filterReducer,  
+    form: formReducer,
+    [orderApi.reducerPath]: orderApi.reducer,
   },
-  middleware: getDefault => getDefault().concat(
-    // if using RTK Query for your networking: add your middleware here
-    // if using Redux Thunk for your networking: you can ignore this
-  ),
-})
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware().concat(orderApi.middleware),
+});
 
-export const store = resetStore()
+export const store = resetStore();
+
+
+
+
+
+//import { configureStore } from '@reduxjs/toolkit';
+//import { orderApi } from './orderApi';
+//import { orderReducer, filterReducer, formReducer } from './slices';
+//
+//export const store = configureStore({
+//  reducer: {
+//    [orderApi.reducerPath]: orderApi.reducer,
+//    orders: orderReducer,
+//    filter: filterReducer,
+//    form: formReducer,
+//  },
+//  middleware: (getDefaultMiddleware) =>
+//    getDefaultMiddleware().concat(orderApi.middleware),
+//});
+
